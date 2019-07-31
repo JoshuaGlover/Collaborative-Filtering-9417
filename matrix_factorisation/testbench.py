@@ -16,7 +16,7 @@ def rmse(pred, orig):
 
 def load_dataset(size):
     # Load ratings and movies from files
-    if size == "100K":
+    if size == "100k":
         ratings = pd.read_csv('movielens_100k/ratings.csv', usecols=['userId', 'movieId', 'rating', 'timestamp'])
         movies  = pd.read_csv('movielens_100k/movies.csv',  usecols=['movieId', 'title', 'genres'])
     elif size == "1M":
