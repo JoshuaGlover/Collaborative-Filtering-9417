@@ -1,5 +1,4 @@
 import numpy as np
-from numba import jit
 
 class SVD():
     def __init__(self, R, k_factors, learning_rate=0.002, regularization=0.02, n_epochs=100,
