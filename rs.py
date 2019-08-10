@@ -48,7 +48,7 @@ amountOfUsedUsers = 6040
 # Creating the training list
 trX = []
 test = []
-
+loc = 0
 # For each user in the group
 for userID, curUser in user_Group:
 
@@ -57,10 +57,10 @@ for userID, curUser in user_Group:
 
     # For each movie in curUser's movie list
     for num, movie in curUser.iterrows():
-        rand = randint(1, 200)
-        if (rand % 100 == 0) and movie['Rating'] != 0 :
+        rand = randint(1, 1000)
+        if (rand % 500 == 0) and movie['Rating'] != 0 :
             test_rat = [0] * 3
-            test_rat[0] = userID
+            test_rat[0] = loc
             test_rat[1] = movie['List Index']
             test_rat[2] = movie['Rating']
             test.append(test_rat)
@@ -71,12 +71,12 @@ for userID, curUser in user_Group:
 
     # Add the list of ratings into the training list
     trX.append(temp)
-
+    loc += 1
     # Check to see if we finished adding in the amount of users for training
     if amountOfUsedUsers == 0:
         break
     amountOfUsedUsers -= 1
-
+print('Number of tests ', len(test))
 # Setting the models Parameters
 hiddenUnits = 50
 visibleUnits = len(movies_df)
@@ -170,22 +170,30 @@ Recommendation System :-
 
 MSE = 0
 print("calculating mse ", len(test))
+prev_user = -1
+rec = []
 for user in test:
+    if prev_user == user[0]:
+        rec_score = rec[0][user[1]]
+        MSE += ((rec_score) - user[2]/5.0) ** 2
+        print(MSE)
+        continue
+    else:
+        inputUser = [trX[user[0]]]
 
-    inputUser = [trX[user[0]]]
+        # Feeding in the User and Reconstructing the input
+        hh0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
+        vv1 = tf.nn.sigmoid(tf.matmul(hh0, tf.transpose(W)) + vb)
+        feed = sess.run(hh0, feed_dict={v0: inputUser, W: prv_w, hb: prv_hb})
+        rec = sess.run(vv1, feed_dict={hh0: feed, W: prv_w, vb: prv_vb})
 
-    # Feeding in the User and Reconstructing the input
-    hh0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
-    vv1 = tf.nn.sigmoid(tf.matmul(hh0, tf.transpose(W)) + vb)
-    feed = sess.run(hh0, feed_dict={v0: inputUser, W: prv_w, hb: prv_hb})
-    rec = sess.run(vv1, feed_dict={hh0: feed, W: prv_w, vb: prv_vb})
-
-    # scored_movies_df = movies_df
-    rec_score = rec[0][user[1]]
-    #print('for user ', user[0]) 
-    #print ("recommendation score is ", rec_score)
-    #print ("actual score is ", user[2])
-    MSE += ((rec_score * 5.0) - user[2]) ** 2
-    print(MSE)
+        # scored_movies_df = movies_df
+        rec_score = rec[0][user[1]]
+        #print('for user ', user[0]) 
+        #print ("recommendation score is ", rec_score)
+        #print ("actual score is ", user[2])
+        MSE += ((rec_score) - user[2]/5.0) ** 2
+        print(MSE)
+        prev_user = user[0]
 RMSE = math.sqrt(MSE / len(test))
 print(RMSE)
