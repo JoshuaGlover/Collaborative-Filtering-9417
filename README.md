@@ -2,7 +2,7 @@
 
 All code should be run using Python 3. Dependencies and requirements are listed at the end of this README.
 
-Link to *zipped* datasets in Google Drive (you will need to unzip after downloading):
+Link to *zipped* datasets in Google Drive (approx. 206MB) (you will need to unzip after downloading):
 
 https://drive.google.com/file/d/16Go9LvfOue6cF-WWD9rbdfMpAWWSnM_v/view?usp=sharing
 
