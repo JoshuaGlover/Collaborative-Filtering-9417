@@ -1,11 +1,9 @@
-# collaborative_filtering
-Collaborative Filtering for COMP9417 
+# Collaborative Filtering: Matrix Factorisation vs Neural Networks
 
 https://medium.com/@james_aka_yale/the-4-recommendation-engines-that-can-predict-your-movie-tastes-bbec857b8223
 
-
 Model-based
-Association algorithms: 
+Association algorithms:
 In general, we can find frequent itemsets or sequences in all item purchased by users to do frequent itemsets mining and find frequent n itemsets or sequences of related items that meet the support threshold. If the user has purchased some items in the frequent n item set or sequence, then we can recommend other items in the frequent item set or sequence to the user according to certain rating criteria, which may include support, confidence and promotion.
 Apriori，FP Tree, PrefixSpan
 
@@ -35,5 +33,3 @@ SimRank and Markov
 
 NLP:
 The hidden semantic model is mainly based on NLP and involves the semantic analysis of user behaviors to make rating recommendations. The main approaches include LSA and LDA
-
-

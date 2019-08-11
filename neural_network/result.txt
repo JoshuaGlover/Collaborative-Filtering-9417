@@ -1,0 +1,3 @@
+The Number of Users in Dataset 6040
+Number of tests  1922
+RMSE: 0.550677004273227
