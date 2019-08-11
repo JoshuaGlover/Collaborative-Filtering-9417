@@ -7,25 +7,30 @@ from dataset                 import fetch_dataset
 from sklearn.metrics         import mean_squared_error
 from sklearn.model_selection import StratifiedKFold
 
-if len(sys.argv) != 5:
-    print("Usage: python3 testbench.py <dataset> <num_splits> <num_k_features> <n_epochs>")
+if len(sys.argv) != 4:
+    print("Usage: python3 testbench.py <dataset> <num_k_features> <n_epochs>")
     sys.exit()
 
 dataset    = sys.argv[1]
-n_splits   = int(sys.argv[2])
-k_features = int(sys.argv[3])
-n_epochs   = int(sys.argv[4])
+k_features = int(sys.argv[2])
+if k_features < 20:
+    print("Usage: k must be greater than or equal to 20")
+    sys.exit()
+n_epochs   = int(sys.argv[3])
 
+# Fetch data
+train_sets, test_sets, user_list, movie_list, B = fetch_dataset(dataset, 5, shuffle=False)
 
-for k in range(240, k_features, 10):
-    train_sets, test_sets, user_list, movie_list, B = fetch_dataset(dataset, n_splits, shuffle=False)
-    train_set = train_sets[0]
-    test_set  = test_sets[0]
+for k in range(10, k_features+1, 10):
+    # Only use one fold
+    train_set = train_sets[0].copy()
+    test_set  = test_sets[0].copy()
 
     # Create matrix factorisation model
     mf = ss.SVD(train_set, k, user_list, movie_list, B, learning_rate=0.002, \
                 regularization=0.02, n_epochs=1, min_rating=1, max_rating=5)
 
+    # Keep track of rmses after every epoch
     rmses = []
     for epoch in range(n_epochs):
         mf.train()
@@ -41,7 +46,6 @@ for k in range(240, k_features, 10):
             originals.append(rating)
 
         rmse = math.sqrt(mean_squared_error(predictions, originals))
-        # print(rmse)
         rmses.append(rmse)
 
-    print(f"\nMinimum RMSE: {np.min(rmses)} at Epoch {np.argmin(rmses)+1} for k = {k}")
+    print(f"K = {k} | Minimum RMSE: {np.min(rmses)} at Epoch: {np.argmin(rmses)+1}")

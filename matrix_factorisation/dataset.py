@@ -23,6 +23,12 @@ def fetch_dataset(dataset, n_splits, shuffle=True):
         dtype = {'userId': np.uint32, 'movieId': np.uint32, 'rating': np.float64}
         ratings = pd.read_csv('../data/movielens_1M/ratings.dat', sep="::", names=names, dtype=dtype, \
                               header=None, engine='python', usecols=[0,1,2])
+    elif dataset == "10M":
+        print("Using 10M Dataset")
+        names = ['userId', 'movieId', 'rating']
+        dtype = {'userId': np.uint32, 'movieId': np.uint32, 'rating': np.float64}
+        ratings = pd.read_csv('../data/movielens_10M/ratings.dat', sep="::", names=names, dtype=dtype, \
+                              header=None, engine='python', usecols=[0,1,2])
     else:
         print("Using 100K Dataset")
         names = ['userId', 'movieId', 'rating']

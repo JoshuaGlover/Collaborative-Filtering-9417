@@ -7,16 +7,19 @@ from dataset                 import fetch_dataset
 from sklearn.metrics         import mean_squared_error
 from sklearn.model_selection import StratifiedKFold
 
-if len(sys.argv) != 5:
-    print("Usage: python3 testbench.py <dataset> <num_splits> <num_k_features> <n_epochs>")
+# Process command line arguments
+if len(sys.argv) != 4:
+    print("Usage: python3 testbench.py <dataset> <num_k_features> <n_epochs>")
     sys.exit()
 
 dataset    = sys.argv[1]
-n_splits   = int(sys.argv[2])
-k_features = int(sys.argv[3])
-n_epochs   = int(sys.argv[4])
+k_features = int(sys.argv[2])
+n_epochs   = int(sys.argv[3])
 
-train_sets, test_sets, user_list, movie_list, B = fetch_dataset(dataset, n_splits)
+# Fetch dataset
+train_sets, test_sets, user_list, movie_list, B = fetch_dataset(dataset, 5)
+
+# Just use one fold
 train_set = train_sets[0]
 test_set  = test_sets[0]
 
@@ -24,7 +27,11 @@ test_set  = test_sets[0]
 mf = ss.SVD(train_set, k_features, user_list, movie_list, B, learning_rate=0.002, \
              regularization=0.02, n_epochs=1, min_rating=1, max_rating=5)
 
+# Keep track of rmse after every epoch
 rmses = []
+
+# Loop number of epochs, measuring RMSE after each
+print("RMSEs after every Epoch:\n")
 for epoch in range(n_epochs):
     mf.train()
 
@@ -42,4 +49,5 @@ for epoch in range(n_epochs):
     print(rmse)
     rmses.append(rmse)
 
+# Return the lowest RMSE achieved and at what Epoch it occured
 print(f"\nMinimum RMSE: {np.min(rmses)} at Epoch {np.argmin(rmses)+1}")

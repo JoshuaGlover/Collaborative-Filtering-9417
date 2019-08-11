@@ -16,6 +16,25 @@ class SVD():
         https://sifter.org/~simon/journal/20061211.html
         https://github.com/gbolmier/funk-svd
 
+        Attributes:
+
+        samples    : training set of rating samples
+        num_users  : number of unique users
+        num_movies : number of unique movies
+        k_factors  : number of latent features used
+        learning_rate  : learning rate used for SGD
+        regularization : regularization parameter used for SGD
+        n_epochs   : number of training epochs
+        min_rating : minimum rating that can be given (1)
+        max_rating : maximum rating that can be given (5)
+        P          : matrix of user latent features
+        Q          : matrix of movie latent features
+        B_u        : rating bias of users
+        B_m        : rating bias for movies
+        B          : global rating bias/mean
+        user_dict  : translates actual userId to index in P
+        movie_dict : translates actual movieId to index in Q
+
         """
         self.samples    = samples
         self.num_users  = len(user_list)
@@ -87,12 +106,6 @@ class SVD():
         pred = self.B + self.B_u[user] + self.B_m[movie] + self.P[user, :].dot(self.Q[movie, :].T)
         np.clip(pred, self.min_rating, self.max_rating)
         return pred
-
-    # def full_matrix(self):
-    #     matrix = self.B + self.B_u[:,np.newaxis] + self.B_m[np.newaxis:,] + self.P.dot(self.Q.T)
-    #     # Clip between min and max rating
-    #     matrix = np.clip(matrix, self.min_rating, self.max_rating)
-    #     return matrix
 
     def pad(self, epoch):
         reps = len(str(self.n_epochs)) - len(str(epoch))
