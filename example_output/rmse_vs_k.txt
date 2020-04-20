@@ -1,0 +1,16 @@
+$ python3 rmse_vs_k.py 100K 20 150
+
+Using 100K Dataset
+Number of Users: 610 | Number of Movies: 9724
+Sparsity: 0.983
+Train Set Length: 80419 | Test Set Length: 20417
+K = 10 | Minimum RMSE: 0.9127222907557976 at Epoch: 54
+K = 20 | Minimum RMSE: 0.9108801853778847 at Epoch: 67
+K = 30 | Minimum RMSE: 0.9057141445749197 at Epoch: 91
+K = 40 | Minimum RMSE: 0.9065972155205788 at Epoch: 95
+K = 50 | Minimum RMSE: 0.9058891732041209 at Epoch: 102
+K = 60 | Minimum RMSE: 0.9033653482466555 at Epoch: 110
+K = 70 | Minimum RMSE: 0.9030323975730535 at Epoch: 114
+K = 80 | Minimum RMSE: 0.9037653808981647 at Epoch: 115
+K = 90 | Minimum RMSE: 0.9017465944360412 at Epoch: 121
+K = 100 | Minimum RMSE: 0.9018624359759008 at Epoch: 124
